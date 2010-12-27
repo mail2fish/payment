@@ -15,9 +15,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "payment"
   gem.homepage = "http://github.com/yj/payment"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
+  gem.summary = %Q{The online payment interface ruby is for Alipay and CBank in China}
   gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "jun.yu@nyapc.com"
+  gem.email = "mail2fish@gmail.com"
   gem.authors = ["yujun"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
