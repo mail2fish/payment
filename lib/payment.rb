@@ -6,12 +6,14 @@ module Payment
   #                     :your_domain=>"www.yourdomain.com", 
   #                     :return_url=>"/payment/receive_from_alipay",
   #                     :notify_url=>"/payment/notify_from_alipay",
-  #                     :price=>800
-  #                     :out_trade_no=>"20102548235" 
+  #                     :security_code="d41d8cd98f00b204e9800998ecf8427e"
   #                      )
-  # @alipay.url_for_alipay
-  # @alipay.form_for_alipay
-  # @alipay.verify(params)
+  # @alipay.url_for_alipay(:price=>800.50, :out_trade_no=>"20102548235")
+  # @alipay.form_for_alipay(:price=>800.50, :out_trade_no=>"20102548235",
+  #                         :submit_text=>"去支付宝支付", :submit_image=>"/images/pay_by_alipay.jpg"
+  #                         :target=>"_blank")
+  # @alipay.get_order_num(params)
+  # @alipay.verify(params,:out_trade_no=>"20102548235", :price=>"800.5")
   # 
   class Alipay
     attr_accessor :your_domain, :gateway, :security_code, :sign_type
@@ -98,18 +100,27 @@ module Payment
     }
 
 
-
+    # 
     def initialize(opt=nil)
-      
-      
+      raise ":partner, :seller_email, :security_code, those options were required." if opt.blank?
+      raise "The option :partner, :seller_email, :security_code was required." unless opt.include?(:partner)
+      raise "The option :seller_email was required." unless opt.include?(:seller_email)
+      raise "The option :security_code was required." unless opt.include?(:security_code)
+      partner = opt[:partner]
+      seller_email = opt[:seller_email]
+      security_code = opt[:security_code]
+      service = opt[:service] || "create_direct_pay_by_user"
+      payment_type = opt[:payment_type] || 1
     end
 
-    def form_for_alipay()
+    # TODO: pending
+    def form_for_alipay(opt=nil)
     end
 
-    def url_for_alipay
+    def url_for_alipay(opt=nil)
     end
 
+    # return true or false
     def verify(params)
     end
     
