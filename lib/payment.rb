@@ -25,12 +25,7 @@ module Payment
       raise "The option :seller_email was required." unless opt.include?(:seller_email)
       raise "The option :security_code was required." unless opt.include?(:security_code)
       
-      opt.each_pair {|key,v|
-        k = key.to_sym
-        attributes[k] = v @@attributes.include?(k)
-      }
-
-
+o
       
       partner = opt[:partner]     
       seller_email = opt[:seller_email]
@@ -60,7 +55,7 @@ module Payment
                     :agent,
                     :anti_phishing_key,
                     :body,
-                    :buyer_account_name
+                    :buyer_account_name,
                     :buyer_email,
                     :buyer_id,
                     :buyer_msg,
@@ -101,6 +96,7 @@ module Payment
                     :t_b_pay,
                     :total_fee
                    ]
+
     @@params = [
                 :body,
                 :buyer_email,
@@ -112,7 +108,7 @@ module Payment
                 :bank_seq_no,
                 :gmt_close,
                 :gmt_create,
-                :gmt_logistics_modify
+                :gmt_logistics_modify,
                 :gmt_payment,
                 :gmt_refund,
                 :gmt_send_goods,
@@ -181,7 +177,8 @@ module Payment
   class Bill99
 
     def initialize(opt=nil)
-      
+      raise "The option :security_code was required." unless opt.include?(:security_code)
+      set_attributes(opt)
     end
 
     def url_for_bill99
@@ -323,5 +320,18 @@ module Payment
       "70003" => "您验证优惠券的用户错误次数超过 3 次,请与快钱客服联系",
     }
 
+  end
+
+  module InstanceMethods
+    
+    def set_attributes(opt)
+      return  if opt.nil? or opt.empty?
+      @attributes ||= {}
+      opt.each_pair {|key,v|
+        k = key.to_sym
+        @attributes[k] = v if self.class.send(:class_variable_get,:@@attributes).include?(k)
+      }
+      
+    end
   end
 end
