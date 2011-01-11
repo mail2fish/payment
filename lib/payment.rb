@@ -164,27 +164,40 @@ o
   # 使用方法：
   # @bill99 = Bill99.new( 
   #                     :your_domain=>"www.yourdomain.com", 
-  #                     :return_url=>"/payment/receive_from_bill99",
-  #                     :notify_url=>"/payment/notify_from_bill99",
+  #                     :bgUrl=>"/payment/receive_from_bill99",
   #                     :security_code="d41d8cd98f00b204e9800998ecf8427e"
+  #                     :merchantAcctId="1002048990901"
   #                      )
-  # @bill99.url_for_bill99(:price=>800.50, :out_trade_no=>"20102548235")
-  # @bill99.form_for_bill99(:price=>800.50, :out_trade_no=>"20102548235",
-  #                         :submit_text=>"去支付宝支付", :submit_image=>"/images/pay_by_bill99.jpg"
-  #                         :target=>"_blank")
+  # @bill99.url_for_bill99(:orderAmount=>800.50, :orderId=>"20102548235")
   # @bill99.get_order_num(params)
   # @bill99.verify(params,:out_trade_no=>"20102548235", :price=>"800.5")
   class Bill99
-
+ 
+    attr_accessor :your_domain, :security_code,  :attributes, :service_url
+    
+    # required options were :security_code, :your_domain, :merchantAcctId, :bgUrl
     def initialize(opt=nil)
       raise "The option :security_code was required." unless opt.include?(:security_code)
+      raise "The option :your_domain was required." unless opt.include?(:yourdomain)
+      raise "The option :merchantAcctId was required." unless opt.include?(:merchantAcctId)
+      raise "The option :bgUrl was required." unless opt.include?(:bgUrl)
+
       set_attributes(opt)
+      service_url = opt[:service_url].prescence  || "https://www.99bill.com/gateway/recvMerchantInfoAction.htm"
     end
 
-    def url_for_bill99
+    # required options were :orderAmount and :orderId, The important thing is the unit of amount  is cent. Example 1.00 RMB，orderAmount=100
+    def url_for_bill99(opt=nil)
+      list = []
+      @@attributes.each do |k|
+        list << "#{k}=#{@attributes[k]}" if @attributes[k].prescent?
+      end
+      query_string =  list.join("&")
+      return ""
     end
     
-    def form_for_bill99
+    # TODO: pendding
+    def form_for_bill99(opt=nil)
     end
 
     # * 表示必填项
